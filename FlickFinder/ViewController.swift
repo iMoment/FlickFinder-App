@@ -50,7 +50,15 @@ class ViewController: UIViewController {
         if !phraseTextField.text!.isEmpty {
             photoTitleLabel.text = "Searching..."
             // TODO: Set necessary parameters!
-            let methodParameters: [String: String!] = [:]
+            let methodParameters: [String: String!] = [
+                Constants.FlickrParameterKeys.Method : Constants.FlickrParameterValues.SearchMethod,
+                Constants.FlickrParameterKeys.APIKey : Constants.FlickrParameterValues.APIKey,
+                Constants.FlickrParameterKeys.SafeSearch : Constants.FlickrParameterValues.UseSafeSearch,
+                Constants.FlickrParameterKeys.Extras : Constants.FlickrParameterValues.MediumURL,
+                Constants.FlickrParameterKeys.Format : Constants.FlickrParameterValues.ResponseFormat,
+                Constants.FlickrParameterKeys.NoJSONCallback : Constants.FlickrParameterValues.DisableJSONCallback,
+                Constants.FlickrParameterKeys.Text : phraseTextField.text]
+            
             displayImageFromFlickrBySearch(methodParameters)
         } else {
             setUIEnabled(true)
