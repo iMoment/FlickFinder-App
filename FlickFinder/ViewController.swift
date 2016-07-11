@@ -156,6 +156,18 @@ class ViewController: UIViewController {
                 return
             }
             
+            // Check for "photos" and "photo" keys in parsedResult
+            guard let photosDictionary = parsedResult[Constants.FlickrResponseKeys.Photos] as? [String : AnyObject],
+                photoArray = photosDictionary[Constants.FlickrResponseKeys.Photo] as? [[String : AnyObject]] else {
+                    displayError("Cannot find keys'\(Constants.FlickrResponseKeys.Photos) and '\(Constants.FlickrResponseKeys.Photo)' in \(parsedResult)")
+                    return
+            }
+            
+            // Select a random photo
+            let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
+            let photoDictionary = photoArray[randomPhotoIndex] as [String : AnyObject]
+            let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
+            
             
         }
         task.resume()
