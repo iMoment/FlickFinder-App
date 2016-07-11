@@ -123,10 +123,33 @@ class ViewController: UIViewController {
                 }
             }
             
+            // Check for error
             guard (error == nil) else {
                 displayError("There was an error with your request: \(error)")
                 return
             }
+            
+            // Check for successful 2XX response
+            guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                displayError("Your request returned a status code other than 2xx.")
+                return
+            }
+            
+            // Check if data was returned
+            guard let data = data else {
+                displayError("No data was returned by the request.")
+                return
+            }
+            
+            // Parse the data
+            let parsedResult: AnyObject!
+            do {
+                parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+            } catch {
+                displayError("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
             
             
         }
