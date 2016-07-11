@@ -164,26 +164,31 @@ class ViewController: UIViewController {
             }
             
             // Select a random photo
-            let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
-            let photoDictionary = photoArray[randomPhotoIndex] as [String : AnyObject]
-            let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
-            
-            // Check our photo for a key for 'url_m'
-            guard let imageURLString = photoDictionary[Constants.FlickrResponseKeys.MediumURL] as? String else {
-                displayError("Cannot find key '\(Constants.FlickrResponseKeys.MediumURL)' in \(photoDictionary)")
+            if photoArray.count == 0 {
+                displayError("No photos found.  Search again.")
                 return
-            }
-            
-            // Set image and title if the image exists at the url
-            let imageURL = NSURL(string: imageURLString)
-            if let imageData = NSData(contentsOfURL: imageURL!) {
-                performUIUpdatesOnMain() {
-                    self.setUIEnabled(true)
-                    self.photoImageView.image = UIImage(data: imageData)
-                    self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
-                }
             } else {
-                displayError("Image does not exist at \(imageURL)")
+                let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
+                let photoDictionary = photoArray[randomPhotoIndex] as [String : AnyObject]
+                let photoTitle = photoDictionary[Constants.FlickrResponseKeys.Title] as? String
+                
+                // Check our photo for a key for 'url_m'
+                guard let imageURLString = photoDictionary[Constants.FlickrResponseKeys.MediumURL] as? String else {
+                    displayError("Cannot find key '\(Constants.FlickrResponseKeys.MediumURL)' in \(photoDictionary)")
+                    return
+                }
+                
+                // Set image and title if the image exists at the url
+                let imageURL = NSURL(string: imageURLString)
+                if let imageData = NSData(contentsOfURL: imageURL!) {
+                    performUIUpdatesOnMain() {
+                        self.setUIEnabled(true)
+                        self.photoImageView.image = UIImage(data: imageData)
+                        self.photoTitleLabel.text = photoTitle ?? "(Untitled)"
+                    }
+                } else {
+                    displayError("Image does not exist at \(imageURL)")
+                }
             }
         }
         task.resume()
