@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         
         if !phraseTextField.text!.isEmpty {
             photoTitleLabel.text = "Searching..."
-            // TODO: Set necessary parameters!
+            
             let methodParameters: [String: String!] = [
                 Constants.FlickrParameterKeys.Method : Constants.FlickrParameterValues.SearchMethod,
                 Constants.FlickrParameterKeys.APIKey : Constants.FlickrParameterValues.APIKey,
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
         
         if isTextFieldValid(latitudeTextField, forRange: Constants.Flickr.SearchLatRange) && isTextFieldValid(longitudeTextField, forRange: Constants.Flickr.SearchLonRange) {
             photoTitleLabel.text = "Searching..."
-            // TODO: Set necessary parameters!
+            
             let methodParameters: [String: String!] = [
                 Constants.FlickrParameterKeys.Method : Constants.FlickrParameterValues.SearchMethod,
                 Constants.FlickrParameterKeys.APIKey : Constants.FlickrParameterValues.APIKey,
@@ -108,9 +108,29 @@ class ViewController: UIViewController {
     
     private func displayImageFromFlickrBySearch(methodParameters: [String:AnyObject]) {
         
-        print(flickrURLFromParameters(methodParameters))
+        let session = NSURLSession.sharedSession()
+        let request = NSURLRequest(URL: flickrURLFromParameters(methodParameters))
         
-        // TODO: Make request to Flickr!
+        let task = session.dataTaskWithRequest(request) { (data, response, error) in
+            
+            func displayError(error: String) {
+                print(error)
+                print("URL at time of error: \(self.flickrURLFromParameters(methodParameters))")
+                performUIUpdatesOnMain {
+                    self.setUIEnabled(true)
+                    self.photoTitleLabel.text = "No photo returned. Try again."
+                    self.photoImageView.image = nil
+                }
+            }
+            
+            guard (error == nil) else {
+                displayError("There was an error with your request: \(error)")
+                return
+            }
+            
+            
+        }
+        task.resume()
     }
     
     // Helper for Creating a URL from Parameters
