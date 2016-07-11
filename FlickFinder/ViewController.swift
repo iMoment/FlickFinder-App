@@ -27,6 +27,7 @@ class ViewController: UIViewController {
         phraseTextField.delegate = self
         latitudeTextField.delegate = self
         longitudeTextField.delegate = self
+        
         // FIX: As of Swift 2.2, using strings for selectors has been deprecated. Instead, #selector(methodName) should be used.
         subscribeToNotification(UIKeyboardWillShowNotification, selector: #selector(keyboardWillShow))
         subscribeToNotification(UIKeyboardWillHideNotification, selector: #selector(keyboardWillHide))
