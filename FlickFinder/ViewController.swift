@@ -150,6 +150,11 @@ class ViewController: UIViewController {
                 return
             }
             
+            // Check to see if Flickr returned an error (stat != ok)
+            guard let stat = parsedResult[Constants.FlickrResponseKeys.Status] as? String where stat == Constants.FlickrResponseValues.OKStatus else {
+                displayError("The Flickr API returned an error.  See error code and message in \(parsedResult)")
+                return
+            }
             
             
         }
