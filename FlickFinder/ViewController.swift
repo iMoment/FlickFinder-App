@@ -179,11 +179,13 @@ class ViewController: UIViewController {
     
     private func displayImageFromFlickrBySearch(methodParameters: [String:AnyObject], withPageNumber: Int) {
         
+        // Add random page number to methodParameters
         var methodParametersWithPageNumber = methodParameters
-        methodParametersWithPageNumber[Constants.FlickrParameterKeys.Page] = withPageNumber
+        methodParametersWithPageNumber[Constants.FlickrParameterKeys.Page] = "\(withPageNumber)"
         
+        // Use new methodParameters to create URL with page number
         let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: flickrURLFromParameters(methodParameters))
+        let request = NSURLRequest(URL: flickrURLFromParameters(methodParametersWithPageNumber))
         
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
