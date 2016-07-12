@@ -62,7 +62,7 @@ class ViewController: UIViewController {
             displayImageFromFlickrBySearch(methodParameters)
         } else {
             setUIEnabled(true)
-            photoTitleLabel.text = "Phrase Empty."
+            photoTitleLabel.text = "No phrase entered."
         }
     }
     
@@ -191,7 +191,7 @@ class ViewController: UIViewController {
             
             func displayError(error: String) {
                 print(error)
-                print("URL at time of error: \(self.flickrURLFromParameters(methodParameters))")
+                print("URL at time of error: \(self.flickrURLFromParameters(methodParametersWithPageNumber))")
                 performUIUpdatesOnMain {
                     self.setUIEnabled(true)
                     self.photoTitleLabel.text = "No photo returned. Try again."
@@ -246,7 +246,7 @@ class ViewController: UIViewController {
             
             // Select a random photo
             if photoArray.count == 0 {
-                displayError("No photos found.  Search again.")
+                displayError("No photos found. Search again.")
                 return
             } else {
                 let randomPhotoIndex = Int(arc4random_uniform(UInt32(photoArray.count)))
